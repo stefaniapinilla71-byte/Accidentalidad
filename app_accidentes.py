@@ -604,7 +604,7 @@ if "Inicio" in pagina:
                             <circle cx="110" cy="100" r="80" stroke="#1a2540" stroke-width="12" fill="transparent" stroke-dasharray="335 168" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px;" />
                             <circle cx="110" cy="100" r="80" stroke="{color}" stroke-width="12" fill="transparent" stroke-dasharray="{335 * (riesgo_pct/100)} 503" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px; transition: stroke-dasharray 0.5s ease-in-out;" />
                         </svg>
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 55px;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 75px;">
                             <div style="font-size: 2.8rem; font-weight: 800; color: {color}; line-height: 1;">{riesgo_pct}%</div>
                             <div style="font-size: 11px; color: #94a3b8; font-weight: 500; margin-top: 6px; letter-spacing: 0.02em;">Índice de riesgo estimado</div>
                         </div>
