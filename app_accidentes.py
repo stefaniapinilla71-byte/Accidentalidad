@@ -408,9 +408,9 @@ with st.sidebar:
 #  CALCULAR KPIs dinámicos
 # ═══════════════════════════════════════════════════════════════
 kpi_incidentes = f"{len(df):,}"
-kpi_edad  = f"{df[COL_EDAD].mean():.1f}"  if COL_EDAD   else "N/D"
-kpi_mun   = df[COL_MUN].mode()[0]               if COL_MUN    else "N/D"
-kpi_actor = df[COL_ACTOR].mode()[0]             if COL_ACTOR  else "N/D"
+kpi_edad  = f"{df[COL_EDAD].mean():.1f}"  if (COL_EDAD and not df.empty and not pd.isna(df[COL_EDAD].mean())) else "N/D"
+kpi_mun   = df[COL_MUN].mode()[0]               if (COL_MUN and not df.empty and not df[COL_MUN].mode().empty) else "N/D"
+kpi_actor = df[COL_ACTOR].mode()[0]             if (COL_ACTOR and not df.empty and not df[COL_ACTOR].mode().empty) else "N/D"
 
 
 # ════════════════════════════════════════════════════════════════
@@ -525,17 +525,56 @@ if "Inicio" in pagina:
                 cols_mod = list(modelo.feature_names_in_)
                 inp      = pd.DataFrame(0, index=[0], columns=cols_mod)
 
-                for poss in ['edad', 'Edad', 'age']:
-                    if poss in inp.columns:
-                        inp.at[0, poss] = edad; break
+                # 1. Asignar Edad
+                if 'Edad' in inp.columns:
+                    inp.at[0, 'Edad'] = edad
 
-                cands = []
-                if mun_sel:  cands += [f'{COL_MUN}_{mun_sel}',    f'municipio_{mun_sel}']
-                if zon_sel:  cands += [f'{COL_ZONA}_{zon_sel}',   f'zona_{zon_sel}']
-                if gen_sel:  cands += [f'{COL_GENERO}_{gen_sel}', f'genero_{gen_sel}']
-                if act_sel:  cands += [f'{COL_ACTOR}_{act_sel}',  f'actor_vial_{act_sel}']
-                for v in cands:
-                    if v in inp.columns: inp.at[0, v] = 1
+                # 2. Función de mapeo robusto a características del modelo (insensible a mayúsculas/minúsculas y acentos)
+                def set_feature_val(prefix, val):
+                    if not val:
+                        return
+                    # Normalizar cadenas para comparación
+                    val_norm = str(val).lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
+                    prefix_norm = prefix.lower()
+                    
+                    for col in inp.columns:
+                        col_norm = col.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
+                        if col_norm.startswith(f"{prefix_norm}_"):
+                            feat_val = col_norm[len(prefix_norm)+1:]
+                            # Eliminar caracteres no alfanuméricos para comparación robusta de codificación
+                            feat_val_clean = ''.join(c for c in feat_val if c.isalnum())
+                            val_clean = ''.join(c for c in val_norm if c.isalnum())
+                            if feat_val_clean == val_clean or val_clean in feat_val_clean or feat_val_clean in val_clean:
+                                inp.at[0, col] = 1
+                                return
+
+                set_feature_val('Municipio', mun_sel)
+                set_feature_val('Zona', zon_sel)
+                set_feature_val('Genero', gen_sel)
+
+                # 3. Mapear Actor Vial a Armas_medios
+                arma_val = 'No Reportado'
+                if act_sel:
+                    act_lower = act_sel.lower()
+                    if 'moto' in act_lower:
+                        arma_val = 'Moto'
+                    elif 'bicicleta' in act_lower or 'ciclista' in act_lower:
+                        arma_val = 'Bicicleta'
+                    elif 'vehiculo' in act_lower or 'vehículo' in act_lower or 'conductor' in act_lower:
+                        arma_val = 'Vehiculo'
+                    elif 'peaton' in act_lower or 'peatón' in act_lower or 'peat' in act_lower:
+                        arma_val = 'Sin empleo de armas'
+                set_feature_val('Armas_medios', arma_val)
+
+                # 4. Mapear Edad a Grupo_etario
+                grupo_val = 'No Reportado'
+                if edad < 12:
+                    grupo_val = 'Menores'
+                elif edad < 18:
+                    grupo_val = 'Adolescentes'
+                else:
+                    grupo_val = 'Adultos'
+                set_feature_val('Grupo_etario', grupo_val)
 
                 pred      = modelo.predict(inp)[0]
                 probs     = modelo.predict_proba(inp)[0]
@@ -720,4 +759,4 @@ else:
             ))
             fig2 = dark_layout(fig2)
             fig2.update_layout(showlegend=False, height=320, barmode='overlay')
-            st.plotly_chart(fig2, use_container_width=True, config={'displayMode
+            st.plotly_chart(fig2, use_container_width=True, config={'displayModeBar': False})
