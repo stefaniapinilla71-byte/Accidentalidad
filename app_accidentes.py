@@ -591,43 +591,51 @@ if "Inicio" in pagina:
 
                 # Mostrar resultado estilo imagen
                 st.markdown(f"""
-                <div style="background:{BG_CARD};border:1px solid {BORDER};
-                            border-radius:16px;padding:24px;min-height:420px;">
-                    <div style="font-size:12px;font-weight:600;color:{TEXT_MUT};
-                                text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">
+                <div style="background:{BG_CARD};border:1px solid {BORDER};border-radius:16px;padding:24px;min-height:420px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;">
+                    <div style="width:100%;text-align:left;font-size:12px;font-weight:600;color:{TEXT_MUT};text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">
                         🔮 Resultado del análisis
                     </div>
-                    <div style="text-align:center;">
-                        <div style="font-size:4rem;font-weight:800;color:{color_riesgo};">
-                            {riesgo_pct}%
+                    <div style="position:relative;width:160px;height:160px;display:flex;justify-content:center;align-items:center;">
+                        <svg width="160" height="160" viewBox="0 0 160 160" style="transform: rotate(-90deg); position: absolute; top:0; left:0;">
+                            <circle cx="80" cy="80" r="65" stroke="{BG_CARD2}" stroke-width="10" fill="transparent" />
+                            <circle cx="80" cy="80" r="65" stroke="{color_riesgo}" stroke-width="10" fill="transparent"
+                                    stroke-dasharray="408.4" stroke-dashoffset="{408.4 * (1 - riesgo_pct/100)}"
+                                    stroke-linecap="round" />
+                        </svg>
+                        <div style="text-align:center;z-index:2;">
+                            <div style="font-size:2.8rem;font-weight:800;color:{TEXT_PRI};line-height:1;">
+                                {riesgo_pct}%
+                            </div>
+                            <div style="font-size:11px;color:{TEXT_SEC};margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">
+                                Riesgo
+                            </div>
                         </div>
-                        <div style="font-size:0.9rem;font-weight:600;color:{TEXT_SEC};margin-top:4px;">
+                    </div>
+                    <div style="text-align:center;width:100%;margin-top:16px;">
+                        <div style="font-size:0.9rem;font-weight:600;color:{TEXT_SEC};margin-bottom:12px;">
                             Índice de riesgo estimado
                         </div>
-                        <div style="margin:16px 0;display:flex;justify-content:center;">
-                            <div style="background:{bg_riesgo};border:1px solid {color_riesgo}40;
-                                        border-radius:100px;padding:6px 20px;">
-                                <span style="font-size:1.2rem;font-weight:700;color:{color_riesgo};">
-                                    {icon_riesgo} {label_riesgo}
+                        <div style="display:flex;justify-content:center;margin-bottom:16px;">
+                            <div style="background:{bg_riesgo};border:1px solid {color_riesgo}30;border-radius:100px;padding:6px 20px;display:flex;align-items:center;gap:8px;">
+                                <span style="width:10px;height:10px;border-radius:50%;background-color:{color_riesgo};display:inline-block;box-shadow:0 0 8px {color_riesgo};"></span>
+                                <span style="font-size:0.85rem;font-weight:700;color:{color_riesgo};letter-spacing:0.02em;">
+                                    {label_riesgo}
                                 </span>
                             </div>
                         </div>
-                        <div style="display:flex;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap;">
-                            <div style="background:{BG_CARD2};border-radius:8px;padding:8px 16px;">
-                                <div style="font-size:10px;color:{TEXT_MUT};text-transform:uppercase;">Actor Vial</div>
-                                <div style="font-size:14px;font-weight:600;color:{TEXT_PRI};">{act_sel if act_sel else 'N/D'}</div>
+                        <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+                            <div style="background:{BG_CARD2};border-radius:8px;padding:6px 12px;border:1px solid {BORDER};">
+                                <div style="font-size:9px;color:{TEXT_MUT};text-transform:uppercase;font-weight:600;">Actor Vial</div>
+                                <div style="font-size:12px;font-weight:600;color:{TEXT_PRI};">{act_sel if act_sel else 'N/D'}</div>
                             </div>
-                            <div style="background:{BG_CARD2};border-radius:8px;padding:8px 16px;">
-                                <div style="font-size:10px;color:{TEXT_MUT};text-transform:uppercase;">Municipio</div>
-                                <div style="font-size:14px;font-weight:600;color:{TEXT_PRI};">{mun_sel if mun_sel else 'N/D'}</div>
+                            <div style="background:{BG_CARD2};border-radius:8px;padding:6px 12px;border:1px solid {BORDER};">
+                                <div style="font-size:9px;color:{TEXT_MUT};text-transform:uppercase;font-weight:600;">Municipio</div>
+                                <div style="font-size:12px;font-weight:600;color:{TEXT_PRI};">{mun_sel if mun_sel else 'N/D'}</div>
                             </div>
-                            <div style="background:{BG_CARD2};border-radius:8px;padding:8px 16px;">
-                                <div style="font-size:10px;color:{TEXT_MUT};text-transform:uppercase;">Confianza</div>
-                                <div style="font-size:14px;font-weight:600;color:{TEXT_PRI};">{conf:.1%}</div>
+                            <div style="background:{BG_CARD2};border-radius:8px;padding:6px 12px;border:1px solid {BORDER};">
+                                <div style="font-size:9px;color:{TEXT_MUT};text-transform:uppercase;font-weight:600;">Confianza</div>
+                                <div style="font-size:12px;font-weight:600;color:{TEXT_PRI};">{conf:.1%}</div>
                             </div>
-                        </div>
-                        <div style="margin-top:16px;font-size:11px;color:{TEXT_MUT};">
-                            Proyecto SENA · 2026
                         </div>
                     </div>
                 </div>
