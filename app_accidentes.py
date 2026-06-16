@@ -596,102 +596,42 @@ if "Inicio" in pagina:
                     bg = "rgba(239,68,68,0.08)"
     
                 # === NUEVO DISEÑO DEL RESULTADO ===
-                st.markdown(f"""
-                <div style="background: rgba(20, 20, 30, 0.6);
-                            border: 1px solid rgba(255,255,255,0.06);
-                            border-radius: 12px;
-                            padding: 2rem 1.5rem;
-                            min-height: 400px;
-                            backdrop-filter: blur(10px);
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: space-between;">
-                    
-                    <div style="width: 100%; text-align: left; font-size: 10px; 
-                                font-weight: 600; color: #475569; 
-                                text-transform: uppercase; letter-spacing: 0.08em; 
-                                margin-bottom: 16px;">
-                        🔮 Resultado del análisis
-                    </div>
-                    
+                st.markdown(f"""<div style="background: rgba(20, 20, 30, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2rem 1.5rem; min-height: 400px; backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+                    <div style="width: 100%; text-align: left; font-size: 10px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;">🔮 Resultado del análisis</div>
                     <div style="position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
                         <svg width="150" height="150" viewBox="0 0 150 150" style="transform: rotate(-90deg); position: absolute; top:0; left:0;">
-                            <!-- Background Circle -->
                             <circle cx="75" cy="75" r="60" stroke="rgba(255,255,255,0.04)" stroke-width="10" fill="transparent" />
-                            <!-- Progress Circle -->
-                            <circle cx="75" cy="75" r="60" stroke="{color}" stroke-width="10" fill="transparent"
-                                    stroke-dasharray="377" stroke-dashoffset="{377 * (1 - riesgo_pct/100)}"
-                                    stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease-in-out;" />
+                            <circle cx="75" cy="75" r="60" stroke="{color}" stroke-width="10" fill="transparent" stroke-dasharray="377" stroke-dashoffset="{377 * (1 - riesgo_pct/100)}" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease-in-out;" />
                         </svg>
                         <div style="text-align: center; z-index: 2;">
-                            <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; line-height: 1;">
-                                {riesgo_pct}%
-                            </div>
-                            <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">
-                                Riesgo
-                            </div>
+                            <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; line-height: 1;">{riesgo_pct}%</div>
+                            <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">Riesgo</div>
                         </div>
                     </div>
-                    
                     <div style="text-align: center; width: 100%;">
-                        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 400; margin-bottom: 12px;">
-                            Índice de riesgo estimado
-                        </div>
-                        
+                        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 400; margin-bottom: 12px;">Índice de riesgo estimado</div>
                         <div style="display: flex; justify-content: center; margin-bottom: 16px;">
-                            <div style="background: {bg};
-                                        border: 1px solid {color}30;
-                                        border-radius: 100px;
-                                        padding: 6px 24px;
-                                        display: inline-flex;
-                                        align-items: center;
-                                        gap: 8px;">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; 
-                                             background: {color}; display: inline-block;
-                                             box-shadow: 0 0 12px {color}60;"></span>
-                                <span style="font-size: 0.8rem; font-weight: 700; color: {color}; 
-                                             letter-spacing: 0.04em;">
-                                    {label}
-                                </span>
+                            <div style="background: {bg}; border: 1px solid {color}30; border-radius: 100px; padding: 6px 24px; display: inline-flex; align-items: center; gap: 8px;">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: {color}; display: inline-block; box-shadow: 0 0 12px {color}60;"></span>
+                                <span style="font-size: 0.8rem; font-weight: 700; color: {color}; letter-spacing: 0.04em;">{label}</span>
                             </div>
                         </div>
-                        
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-                            <div style="background: rgba(255,255,255,0.03); 
-                                        border: 1px solid rgba(255,255,255,0.06); 
-                                        border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
-                                    Actor Vial
-                                </div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
-                                    {act_sel_pred if act_sel_pred else 'N/D'}
-                                </div>
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
+                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Actor Vial</div>
+                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{act_sel_pred if act_sel_pred else 'N/D'}</div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.03); 
-                                        border: 1px solid rgba(255,255,255,0.06); 
-                                        border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
-                                    Municipio
-                                </div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
-                                    {mun_sel_pred if mun_sel_pred else 'N/D'}
-                                </div>
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
+                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Municipio</div>
+                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{mun_sel_pred if mun_sel_pred else 'N/D'}</div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.03); 
-                                        border: 1px solid rgba(255,255,255,0.06); 
-                                        border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
-                                    Confianza
-                                </div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
-                                    {conf:.1%}
-                                </div>
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
+                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Confianza</div>
+                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{conf:.1%}</div>
                             </div>
                         </div>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
+                </div>""", unsafe_allow_html=True)
     
             except Exception as e:
                 st.error(f"Error en predicción: {e}")
