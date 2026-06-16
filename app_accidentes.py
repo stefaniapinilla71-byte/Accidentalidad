@@ -51,7 +51,6 @@ footer {{ display: none !important; }}
 ::-webkit-scrollbar {{ width: 6px; }}
 ::-webkit-scrollbar-track {{ background: {BG_BASE}; }}
 ::-webkit-scrollbar-thumb {{ background: {BORDER}; border-radius: 3px; }}
-
 /* Inputs */
 [data-baseweb="select"] > div {{
     background: {BG_CARD2} !important;
@@ -66,7 +65,6 @@ footer {{ display: none !important; }}
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }}
-
 /* Botón */
 .stButton > button {{
     background: linear-gradient(135deg, {ACCENT}, {ACCENT2}) !important;
@@ -83,7 +81,6 @@ footer {{ display: none !important; }}
     transform: translateY(-1px) !important;
     box-shadow: 0 8px 20px rgba(59,130,246,0.35) !important;
 }}
-
 /* Expander */
 [data-testid="stExpander"] {{
     background: {BG_CARD} !important;
@@ -91,7 +88,6 @@ footer {{ display: none !important; }}
     border-radius: 12px !important;
 }}
 hr {{ border-color: {BORDER} !important; }}
-
 /* ── KPI Cards ── */
 .kpi-card {{
     background: {BG_CARD};
@@ -136,7 +132,6 @@ hr {{ border-color: {BORDER} !important; }}
     top: 18px; right: 18px;
     font-size: 26px; opacity: .2;
 }}
-
 /* ── Section title ── */
 .sec-title {{
     font-size: 1rem;
@@ -149,7 +144,6 @@ hr {{ border-color: {BORDER} !important; }}
     color: {TEXT_SEC};
     margin-bottom: 16px;
 }}
-
 /* ── Hero banner ── */
 .hero-banner {{
     border-radius: 20px;
@@ -160,10 +154,7 @@ hr {{ border-color: {BORDER} !important; }}
 }}
 .hero-overlay {{
     position: absolute; inset: 0;
-    background: linear-gradient(90deg,
-        rgba(11,17,32,.95) 0%,
-        rgba(11,17,32,.7)  50%,
-        rgba(11,17,32,.2)  100%);
+    background: linear-gradient(90deg, rgba(11,17,32,.95) 0%, rgba(11,17,32,.7) 50%, rgba(11,17,32,.2) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -192,7 +183,6 @@ hr {{ border-color: {BORDER} !important; }}
     color: {TEXT_SEC};
     max-width: 500px;
 }}
-
 /* ── Chart card ── */
 .chart-card {{
     background: {BG_CARD};
@@ -201,7 +191,6 @@ hr {{ border-color: {BORDER} !important; }}
     padding: 20px;
     margin-bottom: 20px;
 }}
-
 /* ── Nav items ── */
 .nav-item {{
     display: flex;
@@ -228,7 +217,6 @@ hr {{ border-color: {BORDER} !important; }}
     letter-spacing: .12em;
     padding: 14px 14px 6px;
 }}
-
 /* ── Result Card mejorada ── */
 .result-card {{
     background: {BG_CARD};
