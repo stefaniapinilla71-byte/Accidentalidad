@@ -597,38 +597,33 @@ if "Inicio" in pagina:
     
                 # === NUEVO DISEÑO DEL RESULTADO ===
                 st.markdown(f"""<div style="background: rgba(20, 20, 30, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2rem 1.5rem; min-height: 400px; backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
-                    <div style="width: 100%; text-align: left; font-size: 10px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;">🔮 Resultado del análisis</div>
-                    <div style="position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                        <svg width="150" height="150" viewBox="0 0 150 150" style="transform: rotate(-90deg); position: absolute; top:0; left:0;">
-                            <circle cx="75" cy="75" r="60" stroke="rgba(255,255,255,0.04)" stroke-width="10" fill="transparent" />
-                            <circle cx="75" cy="75" r="60" stroke="{color}" stroke-width="10" fill="transparent" stroke-dasharray="377" stroke-dashoffset="{377 * (1 - riesgo_pct/100)}" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease-in-out;" />
+                    <div style="width: 100%; text-align: left; font-size: 11px; font-weight: 700; color: #5B6D8C; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;">🔮 RESULTADO DEL ANÁLISIS</div>
+                    <div style="position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+                        <svg width="180" height="180" viewBox="0 0 180 180" style="position: absolute; top:0; left:0;">
+                            <circle cx="90" cy="90" r="70" stroke="#121e33" stroke-width="12" fill="transparent" stroke-dasharray="293.2 146.6" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 90px 90px;" />
+                            <circle cx="90" cy="90" r="70" stroke="{color}" stroke-width="12" fill="transparent" stroke-dasharray="{293.2 * (riesgo_pct/100)} 440" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 90px 90px; transition: stroke-dasharray 0.5s ease-in-out;" />
                         </svg>
-                        <div style="text-align: center; z-index: 2;">
-                            <div style="font-size: 2.3rem; font-weight: 800; color: #ffffff; line-height: 1;">{riesgo_pct}%</div>
-                            <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">Riesgo</div>
+                        <div style="text-align: center; z-index: 2; margin-top: -15px;">
+                            <div style="font-size: 2.8rem; font-weight: 800; color: {color}; line-height: 1;">{riesgo_pct}%</div>
+                            <div style="font-size: 10px; color: #94a3b8; font-weight: 500; margin-top: 6px; letter-spacing: 0.02em;">Índice de riesgo estimado</div>
                         </div>
                     </div>
-                    <div style="text-align: center; width: 100%;">
-                        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: 400; margin-bottom: 12px;">Índice de riesgo estimado</div>
-                        <div style="display: flex; justify-content: center; margin-bottom: 16px;">
-                            <div style="background: {bg}; border: 1px solid {color}30; border-radius: 100px; padding: 6px 24px; display: inline-flex; align-items: center; gap: 8px;">
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background: {color}; display: inline-block; box-shadow: 0 0 12px {color}60;"></span>
-                                <span style="font-size: 0.8rem; font-weight: 700; color: {color}; letter-spacing: 0.04em;">{label}</span>
-                            </div>
+                    <div style="background: {bg}; border: 1px solid {color}25; border-radius: 12px; padding: 16px 20px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;">
+                        <div style="width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffffff 0%, {color} 40%, {color} 100%); box-shadow: 0 0 12px {color};"></div>
+                        <div style="font-size: 0.82rem; font-weight: 700; color: {color}; letter-spacing: 0.05em; text-align: center;">{label}</div>
+                    </div>
+                    <div style="display: flex; gap: 10px; width: 100%; margin-top: 15px; justify-content: space-between;">
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 4px; flex: 1; text-align: center;">
+                            <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 2px;">Actor Vial</div>
+                            <div style="font-size: 11px; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{act_sel_pred if act_sel_pred else 'N/D'}</div>
                         </div>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Actor Vial</div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{act_sel_pred if act_sel_pred else 'N/D'}</div>
-                            </div>
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Municipio</div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{mun_sel_pred if mun_sel_pred else 'N/D'}</div>
-                            </div>
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 4px 14px;">
-                                <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">Confianza</div>
-                                <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">{conf:.1%}</div>
-                            </div>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 4px; flex: 1; text-align: center;">
+                            <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 2px;">Municipio</div>
+                            <div style="font-size: 11px; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{mun_sel_pred if mun_sel_pred else 'N/D'}</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 6px 4px; flex: 1; text-align: center;">
+                            <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 2px;">Confianza</div>
+                            <div style="font-size: 11px; font-weight: 600; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{conf:.1%}</div>
                         </div>
                     </div>
                 </div>""", unsafe_allow_html=True)
