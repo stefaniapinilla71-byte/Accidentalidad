@@ -598,14 +598,14 @@ if "Inicio" in pagina:
                 # === NUEVO DISEÑO DEL RESULTADO ===
                 st.markdown(f"""<div style="background: rgba(20, 20, 30, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2rem 1.5rem; min-height: 400px; backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
                     <div style="width: 100%; text-align: left; font-size: 11px; font-weight: 700; color: #5B6D8C; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;">🔮 RESULTADO DEL ANÁLISIS</div>
-                    <div style="position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; margin-top: 10px;">
-                        <svg width="180" height="180" viewBox="0 0 180 180" style="position: absolute; top:0; left:0;">
-                            <circle cx="90" cy="90" r="70" stroke="#121e33" stroke-width="12" fill="transparent" stroke-dasharray="293.2 146.6" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 90px 90px;" />
-                            <circle cx="90" cy="90" r="70" stroke="{color}" stroke-width="12" fill="transparent" stroke-dasharray="{293.2 * (riesgo_pct/100)} 440" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 90px 90px; transition: stroke-dasharray 0.5s ease-in-out;" />
+                    <div style="position: relative; width: 220px; height: 200px; margin-top: 10px;">
+                        <svg width="220" height="200" viewBox="0 0 220 200" style="position: absolute; top:0; left:0;">
+                            <circle cx="110" cy="100" r="80" stroke="#1e2d45" stroke-width="14" fill="transparent" stroke-dasharray="335 168" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px;" />
+                            <circle cx="110" cy="100" r="80" stroke="{color}" stroke-width="14" fill="transparent" stroke-dasharray="{335 * (riesgo_pct/100)} 503" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px; transition: stroke-dasharray 0.5s ease-in-out;" />
                         </svg>
-                        <div style="text-align: center; z-index: 2; margin-top: -15px;">
-                            <div style="font-size: 2.8rem; font-weight: 800; color: {color}; line-height: 1;">{riesgo_pct}%</div>
-                            <div style="font-size: 10px; color: #94a3b8; font-weight: 500; margin-top: 6px; letter-spacing: 0.02em;">Índice de riesgo estimado</div>
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 20px;">
+                            <div style="font-size: 2.8rem; font-weight: 800; color: #ffffff; line-height: 1;">{riesgo_pct}%</div>
+                            <div style="font-size: 11px; color: #94a3b8; font-weight: 500; margin-top: 6px; letter-spacing: 0.02em;">Índice de riesgo estimado</div>
                         </div>
                     </div>
                     <div style="background: {bg}; border: 1px solid {color}25; border-radius: 12px; padding: 16px 20px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; margin-top: 15px;">
