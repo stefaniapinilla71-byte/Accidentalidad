@@ -600,8 +600,9 @@ if "Inicio" in pagina:
                     <div style="width: 100%; text-align: left; font-size: 11px; font-weight: 700; color: #5B6D8C; text-transform: uppercase; letter-spacing: 0.1em; display: flex; align-items: center; gap: 8px;">🔮 RESULTADO DEL ANÁLISIS</div>
                     <div style="position: relative; width: 220px; height: 200px; margin-top: 10px;">
                         <svg width="220" height="200" viewBox="0 0 220 200" style="position: absolute; top:0; left:0;">
-                            <circle cx="110" cy="100" r="80" stroke="#1e2d45" stroke-width="14" fill="transparent" stroke-dasharray="335 168" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px;" />
-                            <circle cx="110" cy="100" r="80" stroke="{color}" stroke-width="14" fill="transparent" stroke-dasharray="{335 * (riesgo_pct/100)} 503" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px; transition: stroke-dasharray 0.5s ease-in-out;" />
+                            <circle cx="110" cy="100" r="62" stroke="#1e2d45" stroke-width="12" fill="transparent" stroke-dasharray="260 130" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px;" />
+                            <circle cx="110" cy="100" r="80" stroke="#1a2540" stroke-width="12" fill="transparent" stroke-dasharray="335 168" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px;" />
+                            <circle cx="110" cy="100" r="80" stroke="{color}" stroke-width="12" fill="transparent" stroke-dasharray="{335 * (riesgo_pct/100)} 503" stroke-linecap="round" style="transform: rotate(150deg); transform-origin: 110px 100px; transition: stroke-dasharray 0.5s ease-in-out;" />
                         </svg>
                         <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding-top: 20px;">
                             <div style="font-size: 2.8rem; font-weight: 800; color: #ffffff; line-height: 1;">{riesgo_pct}%</div>
