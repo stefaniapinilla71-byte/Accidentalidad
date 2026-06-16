@@ -487,161 +487,226 @@ if "Inicio" in pagina:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── PREDICTOR ─────────────────────────────────────────────
-    st.markdown("""
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-        <div style="width: 3px; height: 20px; background: linear-gradient(180deg, #4f8cf7, #7c6df0); border-radius: 2px;"></div>
-        <div>
-            <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;">Predictor de Escenario de Riesgo</div>
-            <div style="font-size: 0.75rem; color: #94a3b8;">Configura los parámetros del actor vial</div>
-        </div>
+# ─── PREDICTOR DE RIESGO ─────────────────────────────────────
+st.markdown("""
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+    <div style="width: 3px; height: 20px; background: linear-gradient(180deg, #4f8cf7, #7c6df0); border-radius: 2px;"></div>
+    <div>
+        <div style="font-size: 0.95rem; font-weight: 600; color: #ffffff;">Predictor de Escenario de Riesgo</div>
+        <div style="font-size: 0.75rem; color: #94a3b8;">Configura los parámetros del actor vial para obtener una predicción de riesgo</div>
     </div>
+</div>
+""", unsafe_allow_html=True)
+
+p1, p2 = st.columns([1, 1.2], gap="medium")
+
+with p1:
+    st.markdown("""
+    <div style="background: rgba(20, 20, 30, 0.6);
+                border: 1px solid rgba(255,255,255,0.06);
+                border-radius: 12px;
+                padding: 1.25rem;
+                backdrop-filter: blur(10px);">
+        <div style="font-size: 10px; font-weight: 600; color: #475569; 
+                    text-transform: uppercase; letter-spacing: 0.08em; 
+                    margin-bottom: 16px;">
+            ⚙️ Parámetros del escenario
+        </div>
     """, unsafe_allow_html=True)
 
-    p1, p2 = st.columns([1, 1.2], gap="medium")
+    edad = st.slider("Edad del actor vial", 0, 100, 30)
+    mun_sel_pred = st.selectbox("Municipio", sorted(df_full[COL_MUN].dropna().unique())) if COL_MUN else None
+    zon_sel_pred = st.selectbox("Zona del incidente", sorted(df_full[COL_ZONA].dropna().unique())) if COL_ZONA else None
+    gen_sel_pred = st.selectbox("Género", sorted(df_full[COL_GENERO].dropna().unique())) if COL_GENERO else None
+    act_sel_pred = st.selectbox("Tipo de actor vial", sorted(df_full[COL_ACTOR].dropna().unique())) if COL_ACTOR else None
 
-    with p1:
-        st.markdown("""
-        <div class="card" style="padding: 1.25rem;">
-            <div style="font-size: 10px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px;">
-                ⚙️ Parámetros del escenario
-            </div>
-        """, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-        edad = st.slider("Edad del actor vial", 0, 100, 30)
-        mun_sel_pred = st.selectbox("Municipio", sorted(df_full[COL_MUN].dropna().unique())) if COL_MUN else None
-        zon_sel_pred = st.selectbox("Zona del incidente", sorted(df_full[COL_ZONA].dropna().unique())) if COL_ZONA else None
-        gen_sel_pred = st.selectbox("Género", sorted(df_full[COL_GENERO].dropna().unique())) if COL_GENERO else None
-        act_sel_pred = st.selectbox("Tipo de actor vial", sorted(df_full[COL_ACTOR].dropna().unique())) if COL_ACTOR else None
+with p2:
+    if modelo is not None:
+        try:
+            cols_mod = list(modelo.feature_names_in_)
+            inp = pd.DataFrame(0, index=[0], columns=cols_mod)
 
-        st.markdown("</div>", unsafe_allow_html=True)
+            # Asignar edad
+            for col in ['Edad', 'edad', 'age']:
+                if col in inp.columns:
+                    inp.at[0, col] = edad
+                    break
 
-    with p2:
-        if modelo is not None:
-            try:
-                cols_mod = list(modelo.feature_names_in_)
-                inp = pd.DataFrame(0, index=[0], columns=cols_mod)
+            # Función de mapeo
+            def set_feature(prefix, val):
+                if not val:
+                    return
+                val_norm = str(val).lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
+                for col in inp.columns:
+                    col_norm = col.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
+                    if col_norm.startswith(f"{prefix.lower()}_"):
+                        feat_val = col_norm[len(prefix.lower())+1:]
+                        if feat_val == val_norm or val_norm in feat_val or feat_val in val_norm:
+                            inp.at[0, col] = 1
+                            return
 
-                # Asignar edad
-                for col in ['Edad', 'edad', 'age']:
-                    if col in inp.columns:
-                        inp.at[0, col] = edad
-                        break
+            set_feature('Municipio', mun_sel_pred)
+            set_feature('Zona', zon_sel_pred)
+            set_feature('Genero', gen_sel_pred)
 
-                # Función de mapeo
-                def set_feature(prefix, val):
-                    if not val:
-                        return
-                    val_norm = str(val).lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
-                    for col in inp.columns:
-                        col_norm = col.lower().replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ñ', 'n')
-                        if col_norm.startswith(f"{prefix.lower()}_"):
-                            feat_val = col_norm[len(prefix.lower())+1:]
-                            if feat_val == val_norm or val_norm in feat_val or feat_val in val_norm:
-                                inp.at[0, col] = 1
-                                return
+            # Mapear actor a arma
+            arma_val = 'No Reportado'
+            if act_sel_pred:
+                act_lower = act_sel_pred.lower()
+                if 'moto' in act_lower:
+                    arma_val = 'Moto'
+                elif 'bicicleta' in act_lower or 'ciclista' in act_lower:
+                    arma_val = 'Bicicleta'
+                elif 'vehiculo' in act_lower or 'vehículo' in act_lower:
+                    arma_val = 'Vehiculo'
+                elif 'peaton' in act_lower or 'peatón' in act_lower:
+                    arma_val = 'Sin empleo de armas'
+            set_feature('Armas_medios', arma_val)
 
-                set_feature('Municipio', mun_sel_pred)
-                set_feature('Zona', zon_sel_pred)
-                set_feature('Genero', gen_sel_pred)
+            # Grupo etario
+            grupo_val = 'No Reportado'
+            if edad < 12:
+                grupo_val = 'Menores'
+            elif edad < 18:
+                grupo_val = 'Adolescentes'
+            else:
+                grupo_val = 'Adultos'
+            set_feature('Grupo_etario', grupo_val)
 
-                # Mapear actor a arma
-                arma_val = 'No Reportado'
-                if act_sel_pred:
-                    act_lower = act_sel_pred.lower()
-                    if 'moto' in act_lower:
-                        arma_val = 'Moto'
-                    elif 'bicicleta' in act_lower or 'ciclista' in act_lower:
-                        arma_val = 'Bicicleta'
-                    elif 'vehiculo' in act_lower or 'vehículo' in act_lower:
-                        arma_val = 'Vehiculo'
-                    elif 'peaton' in act_lower or 'peatón' in act_lower:
-                        arma_val = 'Sin empleo de armas'
-                set_feature('Armas_medios', arma_val)
+            # Predicción
+            pred = modelo.predict(inp)[0]
+            probs = modelo.predict_proba(inp)[0]
+            conf = max(probs)
+            riesgo_pct = round(conf * 100, 1)
 
-                # Grupo etario
-                grupo_val = 'No Reportado'
-                if edad < 12:
-                    grupo_val = 'Menores'
-                elif edad < 18:
-                    grupo_val = 'Adolescentes'
-                else:
-                    grupo_val = 'Adultos'
-                set_feature('Grupo_etario', grupo_val)
+            # Determinar nivel
+            if riesgo_pct <= 40:
+                color = "#22c55e"  # Verde
+                label = "RIESGO BAJO · CONTROLADO"
+                bg = "rgba(34,197,94,0.08)"
+            elif riesgo_pct <= 70:
+                color = "#f59e0b"  # Amarillo
+                label = "RIESGO MODERADO · PRECAUCIÓN"
+                bg = "rgba(245,158,11,0.08)"
+            else:
+                color = "#ef4444"  # Rojo
+                label = "RIESGO ALTO · CRÍTICO"
+                bg = "rgba(239,68,68,0.08)"
 
-                # Predicción
-                pred = modelo.predict(inp)[0]
-                probs = modelo.predict_proba(inp)[0]
-                conf = max(probs)
-                riesgo_pct = round(conf * 100, 1)
-
-                # Determinar nivel
-                if riesgo_pct <= 40:
-                    color = "#22c55e"
-                    label = "RIESGO BAJO · CONTROLADO"
-                    bg = "rgba(34,197,94,0.08)"
-                elif riesgo_pct <= 70:
-                    color = "#f59e0b"
-                    label = "RIESGO MODERADO · PRECAUCIÓN"
-                    bg = "rgba(245,158,11,0.08)"
-                else:
-                    color = "#ef4444"
-                    label = "RIESGO ALTO · CRÍTICO"
-                    bg = "rgba(239,68,68,0.08)"
-
-                # Mostrar resultado
-                st.markdown(f"""
-                <div class="result-container">
-                    <div style="width:100%; text-align:left; font-size:10px; font-weight:600; color:#475569; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;">
-                        🔮 Resultado del análisis
-                    </div>
-                    <div class="gauge-container">
-                        <svg width="160" height="160" viewBox="0 0 160 160" style="transform: rotate(-90deg); position: absolute; top:0; left:0;">
-                            <circle cx="80" cy="80" r="60" stroke="rgba(255,255,255,0.06)" stroke-width="10" fill="transparent"/>
-                            <circle cx="80" cy="80" r="60" stroke="{color}" stroke-width="10" fill="transparent"
-                                    stroke-dasharray="376.99" stroke-dashoffset="{376.99 * (1 - riesgo_pct/100)}"
-                                    stroke-linecap="round"/>
-                        </svg>
-                        <div class="gauge-center">
-                            <div class="number">{riesgo_pct}%</div>
-                            <div class="label">Riesgo</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 16px; text-align: center;">
-                        <div style="background:{bg}; border:1px solid {color}30; border-radius:100px; padding:4px 20px; display:inline-block;">
-                            <span style="width:8px; height:8px; border-radius:50%; background:{color}; display:inline-block; margin-right:8px;"></span>
-                            <span style="font-size:0.8rem; font-weight:700; color:{color}; letter-spacing:0.02em;">{label}</span>
-                        </div>
-                    </div>
-                    <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; justify-content:center;">
-                        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:4px 14px;">
-                            <div style="font-size:8px; color:#475569; text-transform:uppercase; font-weight:600;">Actor</div>
-                            <div style="font-size:12px; font-weight:600; color:#ffffff;">{act_sel_pred if act_sel_pred else 'N/D'}</div>
-                        </div>
-                        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:4px 14px;">
-                            <div style="font-size:8px; color:#475569; text-transform:uppercase; font-weight:600;">Municipio</div>
-                            <div style="font-size:12px; font-weight:600; color:#ffffff;">{mun_sel_pred if mun_sel_pred else 'N/D'}</div>
-                        </div>
-                        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:4px 14px;">
-                            <div style="font-size:8px; color:#475569; text-transform:uppercase; font-weight:600;">Confianza</div>
-                            <div style="font-size:12px; font-weight:600; color:#ffffff;">{conf:.1%}</div>
-                        </div>
+            # === NUEVO DISEÑO DEL RESULTADO ===
+            st.markdown(f"""
+            <div style="background: rgba(20, 20, 30, 0.6);
+                        border: 1px solid rgba(255,255,255,0.06);
+                        border-radius: 12px;
+                        padding: 2rem 1.5rem;
+                        min-height: 400px;
+                        backdrop-filter: blur(10px);
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;">
+                
+                <!-- Título -->
+                <div style="width: 100%; text-align: left; font-size: 10px; 
+                            font-weight: 600; color: #475569; 
+                            text-transform: uppercase; letter-spacing: 0.08em; 
+                            margin-bottom: 20px;">
+                    🔮 Resultado del análisis
+                </div>
+                
+                <!-- Número grande centrado -->
+                <div style="text-align: center; margin-bottom: 4px;">
+                    <span style="font-size: 4.5rem; font-weight: 800; color: #ffffff; line-height: 1;">
+                        {riesgo_pct}%
+                    </span>
+                </div>
+                
+                <!-- Subtítulo -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="font-size: 0.85rem; color: #94a3b8; font-weight: 400;">
+                        Índice de riesgo estimado
+                    </span>
+                </div>
+                
+                <!-- Etiqueta de riesgo (estilo badge) -->
+                <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+                    <div style="background: {bg};
+                                border: 1px solid {color}30;
+                                border-radius: 100px;
+                                padding: 6px 24px;
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; 
+                                     background: {color}; display: inline-block;
+                                     box-shadow: 0 0 12px {color}60;"></span>
+                        <span style="font-size: 0.8rem; font-weight: 700; color: {color}; 
+                                     letter-spacing: 0.04em;">
+                            {label}
+                        </span>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
-
-            except Exception as e:
-                st.error(f"Error en predicción: {e}")
-        else:
-            st.markdown("""
-            <div class="result-container">
-                <div style="font-size: 40px; margin-bottom: 12px;">📦</div>
-                <div style="color: #94a3b8; font-size: 13px; text-align: center;">
-                    Modelo no disponible.<br>
-                    Sube <code style="background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 4px;">modelo_accidentes.pkl</code>
+                
+                <!-- Footer con info adicional -->
+                <div style="display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; justify-content: center;">
+                    <div style="background: rgba(255,255,255,0.03); 
+                                border: 1px solid rgba(255,255,255,0.06); 
+                                border-radius: 6px; padding: 4px 14px;">
+                        <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
+                            Actor Vial
+                        </div>
+                        <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
+                            {act_sel_pred if act_sel_pred else 'N/D'}
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); 
+                                border: 1px solid rgba(255,255,255,0.06); 
+                                border-radius: 6px; padding: 4px 14px;">
+                        <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
+                            Municipio
+                        </div>
+                        <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
+                            {mun_sel_pred if mun_sel_pred else 'N/D'}
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); 
+                                border: 1px solid rgba(255,255,255,0.06); 
+                                border-radius: 6px; padding: 4px 14px;">
+                        <div style="font-size: 8px; color: #475569; text-transform: uppercase; font-weight: 600;">
+                            Confianza
+                        </div>
+                        <div style="font-size: 12px; font-weight: 600; color: #ffffff; text-align: center;">
+                            {conf:.1%}
+                        </div>
+                    </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
+
+        except Exception as e:
+            st.error(f"Error en predicción: {e}")
+    else:
+        st.markdown("""
+        <div style="background: rgba(20, 20, 30, 0.6);
+                    border: 1px solid rgba(255,255,255,0.06);
+                    border-radius: 12px;
+                    padding: 2rem;
+                    min-height: 400px;
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 12px;">📦</div>
+            <div style="color: #94a3b8; font-size: 13px;">
+                Modelo no disponible.<br>
+                Sube <code style="background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 4px;">modelo_accidentes.pkl</code>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # ════════════════════════════════════════════════════════════════
